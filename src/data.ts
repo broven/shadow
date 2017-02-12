@@ -28,7 +28,10 @@ export function saveRecord(title, origin, path, startTime: Date, endTime: Date, 
       endTime:endTime,
       path:path,
       title:title
-    }
+    } 
+      if(val[today] === undefined) {
+        val[today] = new Object()
+      }
       let originData = val[today][origin]
       // 如果没有数据
       if(originData === undefined) {
@@ -65,7 +68,6 @@ export function getData(key) {
     data.get(key, function (item) {
       var length = Object.getOwnPropertyNames(item).length
       if (length === 0) {
-        debug(`${key} is empty resolve 0`)
         resolve(null)
       } else {
         resolve(item)
