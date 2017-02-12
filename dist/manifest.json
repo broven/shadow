@@ -11,10 +11,11 @@
   "content_scripts": [
     {
       "matches":["*://*/*"],
-      "js": ["main.js"]
+      "js": ["./main.js"]
     }
   ],
   "permissions": [
-      "storage"
+      "storage",
+      "unlimitedStorage"      //为了以后大小不够用启用 local存储
     ]
 }

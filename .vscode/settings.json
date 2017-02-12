@@ -1,0 +1,18 @@
+{
+  "eslint.enable": true,
+  "vsicons.presets.angular": false,
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "dist/manifest.json"
+      ],
+      "url": "http://json.schemastore.org/chrome-manifest"
+    },
+    {
+      "fileMatch": [
+        ".babelrc"
+      ],
+      "url": "http://json.schemastore.org/babelrc"
+    }
+  ]
+}
