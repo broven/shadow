@@ -1,4 +1,5 @@
 import {debug} from "./log"
+import * as date from './date'
 /**
  * 跟踪时间使用
  * 
@@ -41,37 +42,7 @@ export class shadow {
     this.pause()
     return this.duration
   }
-  /**
-   * 返回经过的分钟
-   * @private
-   * @param {Date} pre
-   * @param {Date} cur
-   * @returns {number} minutes
-   * 
-   * @memberOf shadow
-   */
   private subtract(pre:Date, cur:Date):number {
-  // TODO: month would be 30 31 28 or 29
-  let months: Array<number> = [31,28,31,30,31,30,31,31,30,31,30,31]
-  let monthDay
-  let month = pre.getMonth()
-  if (month - 1 === 2 && this.isLeapYear(pre)) {
-    monthDay = 29
-  } else {
-    monthDay = months[month]
+    return date.subtract(pre, cur)
   }
-  return (((cur.getFullYear() - pre.getFullYear()) * 12 +
-    (cur.getMonth() - pre.getMonth())) * monthDay +
-    (cur.getHours() - pre.getHours())) * 60 +
-    (cur.getMinutes() - pre.getMinutes())
-  }
-  private isLeapYear(val:Date):boolean {
-    let year = val.getFullYear()
-    if (year % 400 === 0 || (year % 4 === 0&& year % 100 != 0)) {
-      return true
-    } else {
-      return false
-    }
-  }
-
 }

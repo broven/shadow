@@ -38,7 +38,7 @@ function getPageInfo() {
   startTime = new Date()
 }
 // debug
-window.addEventListener("mousemove", stop)
+// window.addEventListener("mousemove", stop)
 
 
 
