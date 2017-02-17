@@ -13,23 +13,30 @@ import {debug} from "./log"
 import * as pojo from "./pojo/dataStruct"
 let data = chrome.storage.local
 
+/**
+ * 
+ * 存储数据
+ * @export
+ * @param {any} title
+ * @param {any} origin
+ * @param {any} path
+ * @param {Date} startTime
+ * @param {Date} endTime
+ * @param {any} duration
+ */
 export function saveRecord(title, origin, path, startTime: Date, endTime: Date, duration) {
   let today = formatDate(startTime)
   getData(today).then(
     function (val) {
-      // debugger
-      if (val == null) {
-        debug(`${today} is empty, set new`)
-        val = new Object()
-      }
       let time:pojo.timeTrack = {
       duration:duration,
       startTime:startTime,
       endTime:endTime,
       path:path,
       title:title
-    } 
+    }
       if(val[today] === undefined) {
+        debug(`${today} is empty, set new`)
         val[today] = new Object()
       }
       let originData = val[today][origin]
@@ -50,10 +57,8 @@ export function saveRecord(title, origin, path, startTime: Date, endTime: Date, 
       }
       originData.info.duration += duration
       originData.timeTrack.push(time)
-      var temp = new Object()
-      temp[today] = val
-      temp[today][origin] = originData
-      data.set(temp)
+      val[today][origin] = originData
+      data.set(val)
       })
 }
 
@@ -68,7 +73,7 @@ export function getData(key) {
     data.get(key, function (item) {
       var length = Object.getOwnPropertyNames(item).length
       if (length === 0) {
-        resolve(null)
+        resolve({})
       } else {
         resolve(item)
       }

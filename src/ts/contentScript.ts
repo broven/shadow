@@ -1,6 +1,4 @@
 
-
-
 import {shadow} from "./shadow"
 import * as api from "./data"
 import {debug} from "./log"
@@ -9,7 +7,6 @@ let sh:shadow
 window.addEventListener('load', function () {
   api.getData(null).then(val => {
     debug(val)
-    // api.clear()
   })
   getPageInfo()
   sh = new shadow()
@@ -25,14 +22,13 @@ document.addEventListener("visibilitychange", function () {
   sh.start()
  }
 });
-// window.addEventListener("mousemove", stop)
 
 window.addEventListener("beforeunload",stop)
 
 function stop() {
  duration = sh.stop()
  endTime = new Date()
-  api.saveRecord(title, origin, path, startTime, endTime, duration)
+ api.saveRecord(title, origin, path, startTime, endTime, duration)
 }
 function getPageInfo() {
   title = window.document.title
@@ -41,7 +37,8 @@ function getPageInfo() {
   path = url.pathname
   startTime = new Date()
 }
-
+// debug
+window.addEventListener("mousemove", stop)
 
 
 
