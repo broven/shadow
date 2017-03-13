@@ -1,26 +1,69 @@
 import * as api from './data'
-let $clear = document.querySelector('#clear')
-let clear = () => {
-  console.log('test')
-  api.clear()
-}
-let log = () => {
-  api.getData(null).then(val=> {
-    console.log(val)
-  })
+import * as echarts from 'echarts'
+
+var option = {
+
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+
+    visualMap: {
+        show: false,
+        min: 80,
+        max: 600,
+        inRange: {
+            colorLightness: [0, 1]
+        }
+    },
+    series : [
+        {
+            name:'访问来源',
+            type:'pie',
+            radius : '90%',
+            center: ['50%', '50%'],
+            data:[
+                {value:335, name:'直接访问'},
+                {value:310, name:'邮件营销'},
+                {value:274, name:'联盟广告'},
+                {value:235, name:'视频广告'},
+                {value:400, name:'搜索引擎'}
+            ].sort(function (a, b) { return a.value - b.value}),
+            roseType: 'angle',
+            label: {
+                normal: {
+                    position: 'inside'
+                }
+            },
+            labelLine: {
+                normal: {
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    },
+                    smooth: 0.2,
+                    length: 10,
+                    length2: 20
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#c23531',
+                    shadowBlur: 30,
+                    shadowColor: 'rgba(0, 0, 0, 0.3)'
+                }
+            },
+
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+        }
+    ]
 }
 
-$clear.addEventListener('click', clear)
-function bind (operation) {
-  let $operation = document.querySelector(`#${operation}`)
-  $operation.addEventListener('click', operation)
-}
+  console.log('ok')
+   let myChart = echarts.init(document.getElementById('chart'));
+   myChart.setOption(option)
+   console.log('ok')
 
-function sendMessage (msg: {msg:String}) {
-  chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-    var port = chrome.tabs.connect(tabs[0].id)
-    port.postMessage(msg)
-  })
-}
-bind('clear')
-bind('log')
