@@ -2,10 +2,10 @@ import {debug} from "./log"
 import * as date from './date'
 /**
  * 跟踪时间使用
- * 
+ *
  * @class shadow
  */
-export class shadow {
+export class Shadow {
   startTime: Date
   private duration: number = 0
   private haveStop: boolean = true
@@ -24,7 +24,7 @@ export class shadow {
       this.startTime = new Date()
       this.haveStop = false
     }
-    
+
   }
   public pause() {
     if (this.startTime === undefined) {

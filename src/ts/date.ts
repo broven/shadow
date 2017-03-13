@@ -1,6 +1,6 @@
 /**
  * 返回经过的秒数
- * 
+ *
  * @export
  * @param {Date} prev
  * @param {Date} current
@@ -14,4 +14,7 @@ export function getMinutes (seconds: number): number {
 }
 export function getHours (seconds: number): number {
   return  Math.abs(Number((seconds / 60 / 60).toFixed(1)))
+}
+export function getDays (seconds: number): number {
+  return Math.abs(Number((seconds / 3600 / 24)))
 }

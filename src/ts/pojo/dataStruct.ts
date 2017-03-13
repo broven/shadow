@@ -13,6 +13,11 @@ export interface website {
   info: info
   timeTrack: Array<timeTrack>
 }
-export interface day {
-  [origin:string]:website
+
+export interface rankRecord {
+ duration: string
+ title: string
+ hours: number
+ minutes: number
+ days: number
 }
