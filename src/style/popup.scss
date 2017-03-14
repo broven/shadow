@@ -2,9 +2,12 @@ $popup_width: 470px;
 $popup_height: 573px;
 html, body{
   width: $popup_width;
-  height: popup_height;
+  height: $popup_height;
 }
 #chart{
   width: $popup_width / 2;
-  height: $popup_width / 2;
+  height: $popup_height / 2;
+}
+#report_wrap {
+  display: flex;
 }

@@ -1,20 +1,67 @@
 import * as api from './data'
 import * as echarts from 'echarts'
+import * as $ from 'jquery'
+const today = new Date()
+enum Time {
+  second,
+  hour,
+  day
+}
+/**
+ * 获取数据,对数据进行预处理, 决定显示时间的单位
+ *
+ * @param {any} startDate
+ * @param {Date} endDate
+ * @param {Time} timeFormat
+ * @returns
+ */
+function getRecorders(startDate, endDate: Date, timeFormat: Time) {
+  return new Promise((resolve, reject) => {
+    api.getRecords(startDate, endDate).then(data => {
+      data.forEach(item => {
+        item.value = item.duration
+        item.name = item.title
+      })
+      resolve(data)
+    })
+  })
+}
+function render(arr: Array<object>) {
+// 清除之前的数据
+let $list = $('#records')
+let $listViewContent = ''
+arr.forEach(item => {
+  $listViewContent += `<li>${item.name} ${item.value}</li>`
+})
+console.log($listViewContent)
+$list.html($listViewContent)
+
+
+// 渲染新的数据
+  option.series[0].data = arr
+  let myChart = echarts.init(document.getElementById('chart'))
+  myChart.setOption(option)
+}
+
+function init () {
+  let today = new Date()
+  getRecorders(today, today, Time.second)
+    .then(render)
+}
+init()
 
 var option = {
-
     tooltip : {
         trigger: 'item',
+        position: 'right',
+        confine: true,
         formatter: "{a} <br/>{b} : {c} ({d}%)"
     },
 
     visualMap: {
         show: false,
         min: 80,
-        max: 600,
-        inRange: {
-            colorLightness: [0, 1]
-        }
+        max: 600
     },
     series : [
         {
@@ -29,10 +76,9 @@ var option = {
                 {value:235, name:'视频广告'},
                 {value:400, name:'搜索引擎'}
             ].sort(function (a, b) { return a.value - b.value}),
-            roseType: 'angle',
             label: {
                 normal: {
-                    position: 'inside'
+                    show: false
                 }
             },
             labelLine: {
@@ -61,9 +107,4 @@ var option = {
         }
     ]
 }
-
-  console.log('ok')
-   let myChart = echarts.init(document.getElementById('chart'));
-   myChart.setOption(option)
-   console.log('ok')
 

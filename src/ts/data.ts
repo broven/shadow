@@ -51,7 +51,7 @@ function sort(obj: Object, sortKey: string): Array<Object> {
 export function getRecords(startDate, endDate) {
   startDate = new Date(startDate)
   endDate = new Date(endDate)
-  if ((endDate - startDate) <= 0) throw "endDate should bigger then startDate"
+  if ((endDate - startDate) < 0) throw "endDate should bigger then startDate"
   let days = Math.round(getDays(subtract(endDate, startDate)))
   return new Promise((resolve, rejcet) => {
     getData(null).then(val => {
