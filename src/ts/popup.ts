@@ -26,22 +26,7 @@ function getRecorders(startDate, endDate: Date, timeFormat: Time) {
     })
   })
 }
-function render(arr: Array<object>) {
-// 清除之前的数据
-let $list = $('#records')
-let $listViewContent = ''
-arr.forEach(item => {
-  $listViewContent += `<li>${item.name} ${item.value}</li>`
-})
-console.log($listViewContent)
-$list.html($listViewContent)
 
-
-// 渲染新的数据
-  option.series[0].data = arr
-  let myChart = echarts.init(document.getElementById('chart'))
-  myChart.setOption(option)
-}
 
 function init () {
   let today = new Date()
@@ -50,61 +35,40 @@ function init () {
 }
 init()
 
+
+
+function render(arr: Array<object>) {
+
+  arr.forEach(item => {
+  option.series[0].data.unshift(item.value)
+  option.yAxis.data.unshift(item.name)
+  })
+  let myChart = echarts.init(document.getElementById('chart'))
+  myChart.setOption(option)
+}
+
+
 var option = {
-    tooltip : {
-        trigger: 'item',
-        position: 'right',
-        confine: true,
-        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    tooltip: {},
+    grid: {
+      show: false,
+      left: '100px'
     },
-
-    visualMap: {
-        show: false,
-        min: 80,
-        max: 600
+    legend: {
+        data:['柱状图', '矩形树图']
     },
-    series : [
-        {
-            name:'访问来源',
-            type:'pie',
-            radius : '90%',
-            center: ['50%', '50%'],
-            data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:274, name:'联盟广告'},
-                {value:235, name:'视频广告'},
-                {value:400, name:'搜索引擎'}
-            ].sort(function (a, b) { return a.value - b.value}),
-            label: {
-                normal: {
-                    show: false
-                }
-            },
-            labelLine: {
-                normal: {
-                    lineStyle: {
-                        color: 'rgba(255, 255, 255, 0.3)'
-                    },
-                    smooth: 0.2,
-                    length: 10,
-                    length2: 20
-                }
-            },
-            itemStyle: {
-                normal: {
-                    color: '#c23531',
-                    shadowBlur: 30,
-                    shadowColor: 'rgba(0, 0, 0, 0.3)'
-                }
-            },
-
-            animationType: 'scale',
-            animationEasing: 'elasticOut',
-            animationDelay: function (idx) {
-                return Math.random() * 200;
-            }
-        }
-    ]
+    xAxis: {
+        splitLine: {show: false},
+        position: 'top'
+    },
+    yAxis:{
+        data:[],
+       splitLine: {show: false}
+    },
+    series: [{
+        name: '柱状图',
+        type: 'bar',
+        data: []
+    }]
 }
 
