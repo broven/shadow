@@ -8,37 +8,78 @@
  *  ]
  * }
  */
-import { formatDate } from './util'
+import { formatDate, sort } from './util'
 import { subtract, getDays } from './date'
 import { debug } from "./log"
 let data = chrome.storage.local
-
-
 /**
- *
- *
- * @param {object} obj 需要排序的obj
- * @param {string} sortKey 根据这个key来进行排序
- * @return {array} 返回经过排序的数组,降序排列
+ * 获取数据,存储数据
+ *  设置日期,
+ *  获取当天数据
+ *  设置当天数据
+ *  设置当天某一网站的数据
+ *  保存数据
+ * @param {any} date
  */
-function sort(obj, sortKey){
-  let sortArr = []
-  let firstCheck = true
-  for (let key in obj) {
-    if (firstCheck && !obj[key].hasOwnProperty(sortKey)) throw "sub Object don't have this prop"
-    firstCheck = false
-    sortArr.push(obj[key])
-  }
-  sortArr.sort((a, b) => {
-    function key(obj) {
-      return obj[sortKey]
-    }
-    return key(a) > key(b) ? -1 : 1
+export function DayData(date) {
+  this.date = formatDate(date)
+  this.todayData
+}
+DayData.prototype.getDataByDay = function getDataByDay() {
+  return new Promise((resolve, reject) => {
+    getData(this.date).then(val => {
+       let todayData = val[this.date]
+       todayData = todayData ? new Object() : todayData
+        this.todayData = todayData
+        resolve(todayData)
+    })
   })
-  return sortArr
+}
+DayData.prototype.getDataByOrigin = function getDataByOrigin(origin) {
+  return new Promise( (resolve, reject) => {
+    this.getDataByDay().then(todayData => {
+  let originData = this.todayData[origin]?
+                    this.todayData[origin] :
+                    {
+                      info: {
+                        title: '',
+                        duration: 0
+                      },
+                      timeTrack: []
+                    }
+        // website.info.title = path === '/' ?  title : origin
+        resolve(originData)
+    })
+  })
 }
 
 
+DayData.prototype.saveDuration = function (origin, duration) {
+  this.getDataByOrigin(origin).then(val => {
+    val.info.duration += duration
+    this.saveOriginData(origin, val)
+  })
+}
+/**
+ *
+ */
+DayData.prototype.saveDayData = function(dataOfTheDay) {
+  let temp = {}
+  temp[this.today] = dataOfTheDay
+  data.set(temp)
+}
+DayData.prototype.saveOriginData = function(origin, dataOfTheOrigin) {
+  this.getDataByDay().then(dataOfTheDay => {
+  dataOfTheDay[origin] = dataOfTheOrigin
+    this.saveDayData(dataOfTheDay)
+  })
+}
+DayData.prototype.setDataByRecords = function (origin, record) {
+  this.getDataByOrigin(origin).then( val => {
+    val.timeTrack.push(record)
+    this.saveOriginData(origin ,val)
+  })
+}
 /**
  *
  * 根据传递进来的日期返回顺序的时间使用数组
@@ -86,41 +127,15 @@ export function getRecords(startDate, endDate) {
  * @param {any} duration
  */
 export function saveRecord(title, origin, path, startTime, endTime, duration) {
-  let today = formatDate(startTime)
-  getData(today).then(
-    function (val) {
-      let time = {
+const toadyData = new DayData(startTime)
+let time = {
         duration: duration,
         startTime: startTime,
         endTime: endTime,
         path: path,
         title: title
       }
-      if (val[today] === undefined) {
-        debug(`${today} is empty, set new`)
-        val[today] = new Object()
-      }
-      let originData = val[today][origin]
-      // 如果没有数据
-      if (originData === undefined) {
-        let website = {
-          info: {
-            title: '',
-            duration: 0
-          },
-          timeTrack: []
-        }
-        path === '/' ? website.info.title = title : website.info.title = origin
-        originData = website
-      } else {
-        //如果有,解析下
-        // originData = JSON.parse(originData)
-      }
-      originData.info.duration += duration
-      originData.timeTrack.push(time)
-      val[today][origin] = originData
-      data.set(val)
-    })
+  toadyData.setDataByRecords(origin, time)
 }
 
 /**
