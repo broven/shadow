@@ -2,10 +2,10 @@ import * as api from './data'
 import * as echarts from 'echarts'
 import * as $ from 'jquery'
 const today = new Date()
-enum Time {
-  second,
-  hour,
-  day
+let Time = {
+  second: 1,
+  hour: 2,
+  day: 3
 }
 /**
  * 获取数据,对数据进行预处理, 决定显示时间的单位
@@ -15,7 +15,7 @@ enum Time {
  * @param {Time} timeFormat
  * @returns
  */
-function getRecorders(startDate, endDate: Date, timeFormat: Time) {
+function getRecorders(startDate, endDate, timeFormat) {
   return new Promise((resolve, reject) => {
     api.getRecords(startDate, endDate).then(data => {
       data.forEach(item => {
@@ -37,7 +37,7 @@ init()
 
 
 
-function render(arr: Array<object>) {
+function render(arr) {
 
   arr.forEach(item => {
   option.series[0].data.unshift(item.value)

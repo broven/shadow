@@ -11,7 +11,6 @@
 import { formatDate } from './util'
 import { subtract, getDays } from './date'
 import { debug } from "./log"
-import * as pojo from './pojo/dataStruct'
 let data = chrome.storage.local
 
 
@@ -22,8 +21,8 @@ let data = chrome.storage.local
  * @param {string} sortKey 根据这个key来进行排序
  * @return {array} 返回经过排序的数组,降序排列
  */
-function sort(obj: Object, sortKey: string): Array<Object> {
-  let sortArr: Array<Object> = []
+function sort(obj, sortKey){
+  let sortArr = []
   let firstCheck = true
   for (let key in obj) {
     if (firstCheck && !obj[key].hasOwnProperty(sortKey)) throw "sub Object don't have this prop"
@@ -55,8 +54,8 @@ export function getRecords(startDate, endDate) {
   let days = Math.round(getDays(subtract(endDate, startDate)))
   return new Promise((resolve, rejcet) => {
     getData(null).then(val => {
-      let recordarr: Array<pojo.rankRecord>
-      let records: object = {}
+      let recordarr = []
+      let records = {}
       for (let index = 0; index <= days; index++) {
         let currentDate = formatDate(new Date(startDate.getTime() + index * 24 * 3600 * 1000)) // 存储的天的名字 2016-02-14
         let currentDayRecord = val[currentDate]
@@ -86,11 +85,11 @@ export function getRecords(startDate, endDate) {
  * @param {Date} endTime
  * @param {any} duration
  */
-export function saveRecord(title, origin, path, startTime: Date, endTime: Date, duration) {
+export function saveRecord(title, origin, path, startTime, endTime, duration) {
   let today = formatDate(startTime)
   getData(today).then(
     function (val) {
-      let time: pojo.timeTrack = {
+      let time = {
         duration: duration,
         startTime: startTime,
         endTime: endTime,
@@ -104,7 +103,7 @@ export function saveRecord(title, origin, path, startTime: Date, endTime: Date, 
       let originData = val[today][origin]
       // 如果没有数据
       if (originData === undefined) {
-        let website: pojo.website = {
+        let website = {
           info: {
             title: '',
             duration: 0

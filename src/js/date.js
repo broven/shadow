@@ -6,15 +6,15 @@
  * @param {Date} current
  * @returns {String}
  */
-export function subtract (prev:Date, current:Date):number {
+export function subtract (prev, current) {
   return Math.round(Math.abs((prev.getTime() - current.getTime()) / 1000))
 }
-export function getMinutes (seconds: number): number {
+export function getMinutes (seconds) {
   return Math.abs(Math.round( seconds / 60 ))
 }
-export function getHours (seconds: number): number {
+export function getHours (seconds) {
   return  Math.abs(Number((seconds / 60 / 60).toFixed(1)))
 }
-export function getDays (seconds: number): number {
+export function getDays (seconds) {
   return Math.abs(Number((seconds / 3600 / 24)))
 }

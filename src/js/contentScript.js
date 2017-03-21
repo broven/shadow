@@ -3,7 +3,6 @@ import * as api from "./data"
 import {debug} from "./log"
 let title, url, path, origin, startTime = new Date(), endTime, duration = 0
 let sh = new Shadow()
-
 startTime = new Date()
 window.addEventListener('load', function () {
   console.log('document ready');
@@ -18,7 +17,7 @@ window.addEventListener('load', function () {
 /**
  * 当页面可视性发生改变时会触发的事件
  */
-document.addEventListener("visibilitychange", function () {
+document.addEventListener("visibilitychange", () => {
  if(document.hidden){
   sh.pause()
  } else {
