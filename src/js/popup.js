@@ -1,6 +1,7 @@
 import * as api from './data'
 import * as echarts from 'echarts'
 import * as $ from 'jquery'
+require('../style/popup.scss')
 const today = new Date()
 let Time = {
   second: 1,
