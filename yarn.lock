@@ -3711,6 +3711,12 @@ webpack-espower-loader@^1.0.1:
     espower-source "^1.0.0"
     xtend "^4.0.0"
 
+webpack-merge@^4.1.0:
+  version "4.1.0"
+  resolved "http://registry.npm.taobao.org/webpack-merge/download/webpack-merge-4.1.0.tgz#6ad72223b3e0b837e531e4597c199f909361511e"
+  dependencies:
+    lodash "^4.17.4"
+
 webpack-sources@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-0.1.4.tgz#ccc2c817e08e5fa393239412690bb481821393cd"

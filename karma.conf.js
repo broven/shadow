@@ -1,6 +1,6 @@
 // Karma configuration
 // Generated on Wed May 03 2017 20:28:19 GMT+0800 (CST)
-
+let webpackConfig = require('./webpack.test.config')
 module.exports = function(config) {
   config.set({
 
@@ -23,12 +23,13 @@ module.exports = function(config) {
     preprocessors: {
       'test/index.js': ['webpack', 'sourcemap']
     },
+
   webpackMiddleware: {
       // webpack-dev-middleware configuration 
       // i. e. 
       stats: 'errors-only'
     },
-
+    webpack: webpackConfig,
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
