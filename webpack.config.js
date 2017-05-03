@@ -21,7 +21,9 @@ module.exports = {
       }, {
         loader: "sass-loader" // compiles Sass to CSS
       }]
-    }]
+    },{
+    test: /_test\.js$/, loader: "webpack-espower-loader"    
+      }]
   },
   resolve: {
     alias: {},
