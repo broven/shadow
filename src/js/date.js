@@ -18,3 +18,20 @@ export function getHours (seconds) {
 export function getDays (seconds) {
   return Math.abs(Number((seconds / 3600 / 24)))
 }
+
+/**
+ * 对日期进行格式化 2017-02-01
+ * @param {Date} date 
+ */
+export function formatDate(date) {
+  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+}
+
+/**
+ * 判断日期是否第一个是早的
+ * @param {Date} early 
+ * @param {Date} later 
+ */
+export function dateCheck(early, later) {
+  return later - early >= 0
+}
