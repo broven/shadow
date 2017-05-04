@@ -21,7 +21,8 @@ Shadow.prototype.start = function() {
   logger.debug('shadow start')
   if (this._isStarted) return
   this.timerID = window.setInterval(() => {
-    this.duration += STEP*1000
+    this.duration += STEP
+    logger.debug('[shadow] - [set record] duration:' + this.duration)
     setRecord(this.date, this.websiteName, this.path, this.title, this.duration)
   },STEP * 1000)
 }
