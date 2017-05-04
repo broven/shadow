@@ -1,28 +1,31 @@
-import { debug } from "./log"
-import * as date from './date'
+import {setRecord} from './data'
+import Logger from './logger'
+const STEP = 1 //(N)s
 
-
-export function Shadow() {
-  this.startTime = new Date()
+let logger = new Logger()
+//TODO 可以做一下分离, 这个计时的逻辑是一个职责, 存储数据又是一个职责, 当数据格式修改, 但是计时逻辑没有修改时,这个类也要被修改
+/**
+ * @param {Window} window
+ */
+export function Shadow(window) {
+  let location = window.location
+  this.date = new Date()
+  this.websiteName = location.host
+  this.path = location.pathname
   this.duration = 0
+  this.timerID = 0
+  this.title = window.document.title
+  this._isStarted = false
 }
-Shadow.prototype.start = function () {
-    this.startTime = new Date()
-  }
-  Shadow.prototype.pause = function () {
-    if (this.startTime === undefined) {
-      throw new Error('please new a Shadow instance first')
-    }
-    let currentDate = new Date();
-    this.duration += this.subtract(this.startTime, currentDate)
-    // 防止多次记时
-    this.startTime = currentDate;
-    debug(`shadow pause duration:${this.duration}`)
-  }
-  Shadow.prototype.stop = function () {
-    this.pause()
-    return this.duration
-  }
-  Shadow.prototype.subtract = function (pre, cur) {
-    return date.subtract(pre, cur)
-  }
+Shadow.prototype.start = function() {
+  logger.debug('shadow start')
+  if (this._isStarted) return
+  this.timerID = window.setInterval(() => {
+    this.duration += STEP*1000
+    setRecord(this.date, this.websiteName, this.path, this.title, this.duration)
+  },STEP * 1000)
+}
+Shadow.prototype.pause = function() {
+  logger.debug('shadow pause')
+  window.clearInterval(this.timerID)
+}

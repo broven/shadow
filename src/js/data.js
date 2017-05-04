@@ -1,9 +1,12 @@
-import dateUtil from './date'
+import * as dateUtil from './date'
+
+
+const data = chrome.storage.local
 /**
  * @param {Date} date
  */
-async function getDataByDate(date) {
-  return await getData(null)
+ function getDataByDate(date) {
+  return  getData(null)
 }
 /**
  * 设置新的记录, 累加duration
@@ -12,8 +15,21 @@ async function getDataByDate(date) {
  * @param {String} path 
  * @param {Int} duration 
  */
-function setRecord(date, websiteName, path, duration) {
-  
+export function setRecord(date, websiteName, path, title,duration) {
+  date = dateUtil.formatDate(date)
+  getData(date).then(records => {
+    if (records[date] === undefined) records[date] = {}
+    if (records[date][websiteName] === undefined) records[date][websiteName] = {}
+    if (records[date][websiteName][path] === undefined) records[date][websiteName][path] = {
+              title:title ,
+              duration: 0
+            }
+    let website = records[date][websiteName]
+
+    if (path === '/' && website['_info'] === undefined) website['_info'] = {title: title}
+    website[path]['duration'] += duration
+    data.set(records)
+  })
 }
 
 /**
@@ -39,15 +55,10 @@ function getUsage() {
  * @param {String} {Array} key 要读的内容,null为所有
  * @returns {key: value}
  */
-function getData(key) {
+export function getData(key) {
   return new Promise(function (resolve, reject) {
     data.get(key, function (item) {
-      var length = Object.getOwnPropertyNames(item).length
-      if (length === 0) {
-        resolve({})
-      } else {
         resolve(item)
-      }
     })
   })
 }
