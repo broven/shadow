@@ -1,1 +1,1 @@
-export let DEBUG = true
+export let LEVEL = 'DEBUG'
