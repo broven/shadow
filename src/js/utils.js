@@ -20,3 +20,13 @@ export function sort(obj, sortKey){
   })
   return sortArr
 }
+
+/**
+ * 判断一个obj是否有一个属性
+ * @param {Object} obj 
+ * @param {String} property
+ * @return {Boolean} 
+ */
+export function objHas(obj, property) {
+  return obj.hasOwnProperty(property)
+}

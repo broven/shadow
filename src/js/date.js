@@ -24,7 +24,9 @@ export function getDays (seconds) {
  * @param {Date} date 
  */
 export function formatDate(date) {
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+  let month = date.getMonth() + 1 + ''
+  let day = date.getDate() + ''
+  return `${date.getFullYear()}-${month.length == 1 ? '0' + month : month}-${day.length == 1 ? '0' + day : day}`
 }
 
 /**
@@ -34,4 +36,20 @@ export function formatDate(date) {
  */
 export function dateCheck(early, later) {
   return later - early >= 0
+}
+
+/**
+ * @param {Date} startDate 
+ * @param {Date} endDate
+ * @return {Array} dates 一个日期的数组 ['2017-06-25', '2017-06-26']
+ */
+export function dateGap(startDate, endDate) {
+  if (!dateCheck(startDate, endDate)) throw 'startDate should early then endDate'
+  let dates = []
+  endDate.setDate(endDate.getDate() + 1)
+  while (startDate.getTime() < endDate.getTime()) {
+    dates.push(formatDate(startDate))
+    startDate.setDate(startDate.getDate() + 1)
+  }
+  return dates
 }
