@@ -1,13 +1,13 @@
 import {setRecord} from './data'
 import Logger from './logger'
-const STEP = 1 //(N)s
+const STEP = 30 //(N)s
 
 let logger = new Logger()
 //TODO 可以做一下分离, 这个计时的逻辑是一个职责, 存储数据又是一个职责, 当数据格式修改, 但是计时逻辑没有修改时,这个类也要被修改
 /**
  * @param {Window} window
  */
-export function Shadow(window) {
+export default function Shadow(window) {
   let location = window.location
   this.date = new Date()
   this.websiteName = location.host
