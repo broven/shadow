@@ -4,7 +4,7 @@
  * @param {string} sortKey 根据这个key来进行排序
  * @return {array} 返回经过排序的数组,降序排列
  */
-export function sort(obj, sortKey){
+export function sortByKey(obj, sortKey){
   let sortArr = []
   let firstCheck = true
   for (let key in obj) {
