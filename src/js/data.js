@@ -6,19 +6,87 @@ const data = chrome.storage.local
 
 
 /**
- * 
+ * 生成层级统计数据
+ * 格式:
+ * [{
+ * value: 2333,   //duration
+ * name: 'github' //website title
+ * children:[
+ *      {
+ *    value:123
+ *    name: 'subdirname'
+ *    path: '路径'
+ *      }]
+ * }]
  * @param {Date} startDate 
  * @param {Date} endDate 
  */
 export function getTreeMapData(startDate, endDate) {
-
+  return new Promise((resolve, reject) => {
+    getDataByDateGap(startDate, endDate).then(records => {
+      let tempArr = []
+      for (let websiteUrl in records) {
+        let websiteObj = records[websiteUrl]
+        tempArr.push(transformWebsiteData2TreeMapData(websiteUrl, websiteObj))
+      }
+      let treeMapArr = sortTreeMapArr(tempArr)
+      resolve(treeMapArr)
+    })
+  })
+  function treeMapNode(value, name, path) {
+    this.value = value
+    this.name = name
+    this.path = path
+  }
+  /**
+   * 把存储的website数据转换为treeMap所需要的数据
+   * IN: {"github.com": {_info: {duration: 5000, title: github}},
+   *                     /node/issue: {duration: 4500, title: node issue
+   *                    }
+   *     }
+   *            ||
+   *            ||
+   *            \/
+   * OUT: {"value": 5000, name: github, path: github.com
+   *    children: [
+   *      {value: 4500, name: node issue, path: /node/issue}
+   *    ]
+   * }
+   * @param {String} websiteUrl 
+   * @param {Object} websiteObj 
+   */
+  function transformWebsiteData2TreeMapData(websiteUrl, websiteObj) {
+    let info = websiteObj['_info']
+    let tempObj = new treeMapNode(info['duration'], info['title'], websiteUrl)
+    delete websiteObj['_info']
+    let temArr = []
+    for (let websiteRecordPath in websiteObj) {
+      let record = websiteObj[websiteRecordPath]
+      temArr.push(new treeMapNode(record['duration'], record['title'], websiteRecordPath))
+    }
+    tempObj['children'] = sortTreeMapArr(temArr)
+    return tempObj
+  }
+  /**
+   * 排序treemap的数组 根据其中的value进行排序 **降序排列**
+   * @param {Array} unsortArr
+   */
+  
+  function sortTreeMapArr(unsortArr) {
+    unsortArr.sort((a, b) => {
+      return b['value'] - a['value']
+    })
+    let sortedArr = unsortArr
+    return sortedArr
+  }
 }
 
 
 /**
- * 
+ *  根据日期区间获取含有日期区间的所有网站记录的object
  * @param {Date} startDate 
  * @param {Date} endDate 
+ * @return {Object}
  */
 export function getDataByDateGap(startDate, endDate) {
   return new Promise((resolve, reject) => {
@@ -43,7 +111,7 @@ function deepMerge(obj) {
   }
   return sumObj
   /**
-   * merge WebsiteData
+   * merge 网站记录
    * @param {Object} obj
    * @param {Object} mergeIntoObj 
    */
@@ -53,7 +121,7 @@ function deepMerge(obj) {
     }
   }
   /**
-   * 合并网站记录
+   * 合并网站子路径记录
    * @param {Object} obj 
    * @param {Object} mergeIntoObj 
    */
@@ -80,8 +148,9 @@ export function setRecord(date, websiteName, path, title, duration) {
       duration: 0
     }
     let website = records[date][websiteName]
-
-    if (path === '/' && website['_info'] === undefined) website['_info'] = { title: title }
+    if (website['_info'] === undefined) website['_info'] = {title:title, duration: 0}
+    if (path === '/') website['_info']['title'] = title
+    website['_info']['duration'] += duration
     website[path]['duration'] += duration
     data.set(records)
   })
