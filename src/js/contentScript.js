@@ -8,11 +8,9 @@ window.addEventListener('load', init)
 window.addEventListener("beforeunload",stop)
 let shadow = ''
 function init() {
-  DATA.getData(null).then(data => {
-    console.log(data)
-  })
-shadow = new Shadow(window)
-shadow.start()
+  development()
+  shadow = new Shadow(window)
+  shadow.start()
 }
 function stop() {
   shadow.pause()
@@ -21,6 +19,14 @@ function stop() {
 function visibiltyChange() {
   let state = window.document.visibilityState
   state === 'visible'? shadow.start() : shadow.pause()
+}
+function development() {
+   DATA.getData(null).then(data => {
+    console.log(data)
+  })
+  DATA.getTreeMapData(new Date(), new Date()).then(data => {
+    console.log(data)
+  })
 }
 
 
