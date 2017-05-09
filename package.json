@@ -4,6 +4,7 @@
     "@types/jquery": "^2.0.41",
     "@types/node": "^7.0.8",
     "awesome-typescript-loader": "^3.0.4-rc.2",
+    "concurrently": "^3.4.0",
     "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.27.2",
     "echarts": "^3.4.0",
@@ -27,8 +28,9 @@
     "webpack-merge": "^4.1.0"
   },
   "scripts": {
-    "dev": "webpack -w",
-    "test": "node_modules/karma/bin/karma start",
+    "dev": "concurrently -r --kill-others \"yarn run webpack\" \"yarn run test:watch\"",
+    "webpack": "webpack -w",
+    "test": "node_modules/karma/bin/karma start --single-run",
     "test:watch": "node_modules/karma/bin/karma start --auto-watch"
   }
 }
