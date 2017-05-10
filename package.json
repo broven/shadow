@@ -14,6 +14,7 @@
     "karma-mocha": "^1.3.0",
     "karma-mocha-own-reporter": "^1.1.2",
     "karma-power-assert": "^1.0.0",
+    "karma-sauce-launcher": "^1.1.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",
     "mocha": "^3.3.0",
@@ -31,6 +32,7 @@
     "dev": "concurrently -r --kill-others \"yarn run webpack\" \"yarn run test:watch\"",
     "webpack": "webpack -w",
     "test": "node_modules/karma/bin/karma start --single-run",
+    "test:ci": "node_modules/karma/bin/karma start karma.conf-ci.js --single-run",
     "test:watch": "node_modules/karma/bin/karma start --auto-watch"
   }
 }
