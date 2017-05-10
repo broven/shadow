@@ -148,7 +148,7 @@ export function setRecord(date, websiteName, path, title, duration) {
       duration: 0
     }
     let website = records[date][websiteName]
-    if (website['_info'] === undefined) website['_info'] = {title:title, duration: 0}
+    if (website['_info'] === undefined) website['_info'] = {title: path === '/' ? title : websiteName, duration: 0} 
     if (path === '/') website['_info']['title'] = title
     website['_info']['duration'] += duration
     website[path]['duration'] += duration
