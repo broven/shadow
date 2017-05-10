@@ -1,3 +1,3 @@
  - [x] time track
  - [x] stop tick when page is not visable
- - [ ] show: treemap
+ - [x] show: treemap
